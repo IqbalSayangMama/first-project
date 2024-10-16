@@ -6,9 +6,10 @@ function koneksi()
 }
 
 function query(string $query): array
-{
+{ 
+ 
   $koneksi = koneksi();
-
+  
   $result = mysqli_query($koneksi, $query);
 
   if (mysqli_num_rows($result) == 1) {
@@ -78,17 +79,17 @@ function register($data)
   $email = strtolower(stripslashes($data['email']));
   $password = mysqli_real_escape_string($koneksi, $data['password']);
   $confirmPass = mysqli_real_escape_string($koneksi, $data['confirmPass']);
-
+  
   // cek username sudah ada atau belum
   $result = mysqli_query($koneksi, "SELECT nama FROM user WHERE nama = '$username' ");
-
+  
   if (mysqli_fetch_assoc($result)) {
     echo "<script> 
         alert(' Yah.. Username ini udah ga tersedia, pilih username lain aja yaa ^^~');
         </script>";
     return false;
   }
-
+  
   // Cek konfirmasi Password
   if ($password !== $confirmPass) {
     echo "<script>
@@ -96,14 +97,12 @@ function register($data)
             </script>";
     return false;
   }
-
+  
   // enskripsi password
   // var baru = password_hash(variabel yang perlu dienskripsi, jenis enskripsi);
   $password = password_hash($password, PASSWORD_DEFAULT);
-
   // tambahkan user ke database
   $query = "INSERT INTO user VALUES (null, $nip, '$username', '$email', '$password')";
   mysqli_query($koneksi, $query);
-
   return mysqli_affected_rows($koneksi);
 }
